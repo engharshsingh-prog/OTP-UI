@@ -566,11 +566,29 @@ function initStars() {
   render();
 }
 
-// Initial Load State: Match exact screenshot
+// Initial Load State: Match exact screenshot & URL routing
 window.addEventListener('DOMContentLoaded', () => {
   initStars();
   initParallax();
   startCountdown(28);
+
+  // Check if email was saved from login.html or URL query
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramEmail = urlParams.get('email');
+  const storedEmail = localStorage.getItem('user_email');
+  const finalEmail = paramEmail || storedEmail;
+  if (finalEmail) {
+    if (btnChangeEmail) btnChangeEmail.textContent = finalEmail;
+    if (inputUserId) inputUserId.value = finalEmail;
+  }
+
+  // Route between User Credentials and 2FA OTP based on hash
+  if (window.location.hash === '#login' || window.location.hash === '#credentials') {
+    showCredentialsView();
+  } else {
+    showOtpView();
+  }
+
   // Box 0 has active white dot indicator as in screenshot
   updateActiveDot(0);
 });
