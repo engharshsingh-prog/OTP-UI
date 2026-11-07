@@ -360,32 +360,91 @@ otpRow.onpaste = (e) => {
 };
 
 // ==========================================
-// CREDENTIALS MODAL (User ID & Password)
+// USER CREDENTIALS & VIEW SWITCHING
 // ==========================================
+const tabCredentials = document.getElementById('tabCredentials');
+const tabOtp = document.getElementById('tabOtp');
+const credentialsCard = document.getElementById('credentialsCard');
+const otpCard = document.getElementById('panel');
+const credentialsForm = document.getElementById('credentialsForm');
+const inputUserId = document.getElementById('inputUserId');
+const inputPassword = document.getElementById('inputPassword');
+const btnTogglePw = document.getElementById('btnTogglePw');
+const btnDirectOtp = document.getElementById('btnDirectOtp');
+const btnBackToLogin = document.getElementById('btnBackToLogin');
+
+function showCredentialsView() {
+  if (!credentialsCard || !otpCard) return;
+  credentialsCard.style.display = 'flex';
+  otpCard.style.display = 'none';
+  if (tabCredentials) tabCredentials.classList.add('active');
+  if (tabOtp) tabOtp.classList.remove('active');
+  if (inputUserId) inputUserId.focus();
+}
+
+function showOtpView() {
+  if (!credentialsCard || !otpCard) return;
+  credentialsCard.style.display = 'none';
+  otpCard.style.display = 'flex';
+  if (tabOtp) tabOtp.classList.add('active');
+  if (tabCredentials) tabCredentials.classList.remove('active');
+  focusBox(0);
+}
+
+if (tabCredentials) tabCredentials.addEventListener('click', showCredentialsView);
+if (tabOtp) tabOtp.addEventListener('click', showOtpView);
+if (btnBackToLogin) btnBackToLogin.addEventListener('click', showCredentialsView);
+if (btnDirectOtp) btnDirectOtp.addEventListener('click', showOtpView);
+
+// Submit User Credentials -> Advance to 2FA OTP
+if (credentialsForm) {
+  credentialsForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = (inputUserId ? inputUserId.value.trim() : '') || 'you@example.com';
+    const btn = document.getElementById('btnChangeEmail');
+    if (btn) btn.textContent = email;
+    showOtpView();
+    resetInputs();
+  });
+}
+
+// Show/Hide Password Toggle
+if (btnTogglePw && inputPassword) {
+  btnTogglePw.addEventListener('click', () => {
+    const isPw = inputPassword.type === 'password';
+    inputPassword.type = isPw ? 'text' : 'password';
+    btnTogglePw.style.color = isPw ? '#8b5cf6' : '#94a3b8';
+  });
+}
+
 function attachEmailListener() {
   const btn = document.getElementById('btnChangeEmail');
   if (btn) {
     btn.onclick = () => {
-      loginModal.classList.add('open');
-      modalUserId.focus();
+      showCredentialsView();
     };
   }
 }
 attachEmailListener();
 
-btnCloseModal.onclick = () => {
-  loginModal.classList.remove('open');
-};
+if (btnCloseModal) {
+  btnCloseModal.onclick = () => {
+    if (loginModal) loginModal.classList.remove('open');
+  };
+}
 
-modalLoginForm.onsubmit = (e) => {
-  e.preventDefault();
-  const email = modalUserId.value.trim() || 'you@example.com';
-  const btn = document.getElementById('btnChangeEmail');
-  if (btn) btn.textContent = email;
-  loginModal.classList.remove('open');
-  resetInputs();
-  focusBox(0);
-};
+if (modalLoginForm) {
+  modalLoginForm.onsubmit = (e) => {
+    e.preventDefault();
+    const email = modalUserId.value.trim() || 'you@example.com';
+    const btn = document.getElementById('btnChangeEmail');
+    if (btn) btn.textContent = email;
+    if (inputUserId) inputUserId.value = email;
+    if (loginModal) loginModal.classList.remove('open');
+    resetInputs();
+    focusBox(0);
+  };
+}
 
 // ==========================================
 // BUTTER-SMOOTH 3D PARALLAX TILT ON MOUSEMOVE
