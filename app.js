@@ -96,10 +96,11 @@ function setCubeDigit(index, digit) {
     faces.forEach(face => {
       face.textContent = digit;
     });
-    // Trigger pop flash animation
+    // Trigger smooth 3D spring pop animation
     cube.classList.remove('pop');
     void cube.offsetWidth;
     cube.classList.add('pop');
+    setTimeout(() => cube.classList.remove('pop'), 280);
   } else {
     cube.classList.remove('filled', 'pop');
     faces.forEach(face => {
@@ -387,31 +388,91 @@ modalLoginForm.onsubmit = (e) => {
 };
 
 // ==========================================
-// FULLSCREEN STARFIELD CANVAS
+// BUTTER-SMOOTH 3D PARALLAX TILT ON MOUSEMOVE
+// ==========================================
+function initParallax() {
+  const stage = document.querySelector('.live-stage-wrapper');
+  if (!panel || !stage) return;
+
+  let targetTiltX = 0, targetTiltY = 0;
+  let currentTiltX = 0, currentTiltY = 0;
+  let isHovered = false;
+
+  stage.addEventListener('mouseenter', () => {
+    isHovered = true;
+  });
+
+  stage.addEventListener('mousemove', (e) => {
+    if (panel.classList.contains('shake')) return;
+    const rect = stage.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+    targetTiltY = x * 7; // +/- 3.5 deg
+    targetTiltX = -y * 7;
+  });
+
+  stage.addEventListener('mouseleave', () => {
+    isHovered = false;
+    targetTiltX = 0;
+    targetTiltY = 0;
+  });
+
+  function update() {
+    if (!panel.classList.contains('shake')) {
+      // Smooth lerp damping
+      currentTiltX += (targetTiltX - currentTiltX) * 0.08;
+      currentTiltY += (targetTiltY - currentTiltY) * 0.08;
+
+      if (Math.abs(currentTiltX) > 0.02 || Math.abs(currentTiltY) > 0.02 || isHovered) {
+        panel.style.transform = `perspective(1000px) rotateX(${currentTiltX.toFixed(2)}deg) rotateY(${currentTiltY.toFixed(2)}deg)`;
+      } else {
+        panel.style.transform = '';
+      }
+    }
+
+    requestAnimationFrame(update);
+  }
+
+  update();
+}
+
+// ==========================================
+// CRISP HIGH-DPI STARFIELD CANVAS
 // ==========================================
 function initStars() {
   const canvas = document.getElementById('starsCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  let width = (canvas.width = window.innerWidth);
-  let height = (canvas.height = window.innerHeight);
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
-  window.addEventListener('resize', () => {
-    width = canvas.width = window.innerWidth;
-    height = canvas.height = window.innerHeight;
-  });
+  let width = 0;
+  let height = 0;
+
+  function resize() {
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    ctx.scale(dpr, dpr);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
 
   const stars = [];
-  const STAR_COUNT = 85;
+  const STAR_COUNT = 90;
 
   for (let i = 0; i < STAR_COUNT; i++) {
     stars.push({
       x: Math.random() * width,
       y: Math.random() * height,
-      size: Math.random() * 1.5 + 0.3,
+      size: Math.random() * 1.4 + 0.3,
       alpha: Math.random() * 0.75 + 0.2,
-      speed: Math.random() * 0.2 + 0.05,
-      twinkle: Math.random() * 0.02 + 0.005
+      speed: Math.random() * 0.25 + 0.08,
+      twinkle: (Math.random() * 0.015 + 0.005) * (Math.random() > 0.5 ? 1 : -1)
     });
   }
 
@@ -420,9 +481,14 @@ function initStars() {
 
     stars.forEach(s => {
       s.alpha += s.twinkle;
-      if (s.alpha > 0.85 || s.alpha < 0.15) {
-        s.twinkle = -s.twinkle;
+      if (s.alpha > 0.85) {
+        s.alpha = 0.85;
+        s.twinkle = -Math.abs(s.twinkle);
+      } else if (s.alpha < 0.15) {
+        s.alpha = 0.15;
+        s.twinkle = Math.abs(s.twinkle);
       }
+
       s.y -= s.speed;
       if (s.y < 0) {
         s.y = height;
@@ -444,6 +510,7 @@ function initStars() {
 // Initial Load State: Match exact screenshot
 window.addEventListener('DOMContentLoaded', () => {
   initStars();
+  initParallax();
   startCountdown(28);
   // Box 0 has active white dot indicator as in screenshot
   updateActiveDot(0);
