@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OTP Verification V4 — HTML · CSS · JS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Fullscreen Ambient Stars & Floating Slabs Background -->
+  <div class="fullscreen-ambient">
+    <canvas id="starsCanvas"></canvas>
+    <div class="nebula-glow nebula-purple" id="nebulaPurple"></div>
+    <div class="nebula-glow nebula-emerald" id="nebulaEmerald"></div>
+
+    <!-- 2 Large Floating Frosted 3D Slabs (Exact from Screenshot) -->
+    <div class="floating-slab slab-left"></div>
+    <div class="floating-slab slab-right"></div>
+  </div>
+
+  <!-- Main Container Matching Screenshot -->
+  <div class="showcase-wrapper">
+
+    <!-- ========================================================
+         TOP WINDOW: LIVE INTERACTIVE 7-CUBE OTP VERIFICATION
+         ======================================================== -->
+    <div class="canvas-window top-window" id="topWindow">
+      <!-- Window Chrome Header -->
+      <header class="window-bar">
+        <div class="mac-dots">
+          <span class="dot dot-red"></span>
+          <span class="dot dot-yellow"></span>
+          <span class="dot dot-green"></span>
+        </div>
+        <div class="window-title">
+          OTP Verification V4 — 
+          <span class="hl-h">HTML</span> · 
+          <span class="hl-c">CSS</span> · 
+          <span class="hl-j">JS</span>
+        </div>
+        <div class="window-meta">Pixelvault_io</div>
+      </header>
+
+      <!-- Live Interactive Stage Area -->
+      <div class="live-stage-wrapper">
+        <main class="panel" id="panel">
+
+          <!-- Header Text -->
+          <div class="panel-header">
+            <h2 class="title" id="cardTitle">Verify your account</h2>
+            <p class="subtitle" id="cardSubtitle">Enter the 6-digit code we sent to <button type="button" class="email-btn" id="btnChangeEmail" title="Click to change User ID & Password">you@example.com</button></p>
+          </div>
+
+          <!-- 3D 7-CUBE STAGE (1 Main Center Cube + 6 Surrounding Cubes) -->
+          <div class="stage-7cubes" id="stage7Cubes">
+            <!-- Subtle Radial Dotted Spokes Connecting Center to 6 Cubes (Exact from Screenshot/Video) -->
+            <svg class="cluster-spokes" viewBox="0 0 220 210" aria-hidden="true">
+              <line x1="110" y1="105" x2="39" y2="64" class="spoke-line" />
+              <line x1="110" y1="105" x2="110" y2="23" class="spoke-line" />
+              <line x1="110" y1="105" x2="181" y2="64" class="spoke-line" />
+              <line x1="110" y1="105" x2="181" y2="146" class="spoke-line" />
+              <line x1="110" y1="105" x2="110" y2="187" class="spoke-line" />
+              <line x1="110" y1="105" x2="39" y2="146" class="spoke-line" />
+            </svg>
+
+            <div class="cluster-assembly" id="clusterAssembly">
+              
+              <!-- CUBE #1: Main Central Purple Cube -->
+              <div class="cube-3d main-core-cube">
+                <div class="cface cf-front">
+                  <span class="center-light-dot"></span>
+                  <span class="center-error-x">✕</span>
+                  <span class="center-verified-check">✓</span>
+                </div>
+                <div class="cface cf-back"></div>
+                <div class="cface cf-right"></div>
+                <div class="cface cf-left"></div>
+                <div class="cface cf-top"></div>
+                <div class="cface cf-bottom"></div>
+              </div>
+
+              <!-- CUBES #2 - #7: 6 Surrounding Frosted Glass Cubes (Clockwise from Top-Left: Boxes 0 to 5) -->
+              <div class="surrounding-ring" id="surroundingRing">
+                <!-- Box 0: Top-Left Cube -->
+                <div class="cube-3d sat-cube sat-top-left" data-idx="0">
+                  <div class="sface sf-front"></div>
+                  <div class="sface sf-back"></div>
+                  <div class="sface sf-right"></div>
+                  <div class="sface sf-left"></div>
+                  <div class="sface sf-top"></div>
+                  <div class="sface sf-bottom"></div>
+                </div>
+
+                <!-- Box 1: Top Cube -->
+                <div class="cube-3d sat-cube sat-top" data-idx="1">
+                  <div class="sface sf-front"></div>
+                  <div class="sface sf-back"></div>
+                  <div class="sface sf-right"></div>
+                  <div class="sface sf-left"></div>
+                  <div class="sface sf-top"></div>
+                  <div class="sface sf-bottom"></div>
+                </div>
+
+                <!-- Box 2: Top-Right Cube -->
+                <div class="cube-3d sat-cube sat-top-right" data-idx="2">
+                  <div class="sface sf-front"></div>
+                  <div class="sface sf-back"></div>
+                  <div class="sface sf-right"></div>
+                  <div class="sface sf-left"></div>
+                  <div class="sface sf-top"></div>
+                  <div class="sface sf-bottom"></div>
+                </div>
+
+                <!-- Box 3: Bottom-Right Cube -->
+                <div class="cube-3d sat-cube sat-bottom-right" data-idx="3">
+                  <div class="sface sf-front"></div>
+                  <div class="sface sf-back"></div>
+                  <div class="sface sf-right"></div>
+                  <div class="sface sf-left"></div>
+                  <div class="sface sf-top"></div>
+                  <div class="sface sf-bottom"></div>
+                </div>
+
+                <!-- Box 4: Bottom Cube -->
+                <div class="cube-3d sat-cube sat-bottom" data-idx="4">
+                  <div class="sface sf-front"></div>
+                  <div class="sface sf-back"></div>
+                  <div class="sface sf-right"></div>
+                  <div class="sface sf-left"></div>
+                  <div class="sface sf-top"></div>
+                  <div class="sface sf-bottom"></div>
+                </div>
+
+                <!-- Box 5: Bottom-Left Cube -->
+                <div class="cube-3d sat-cube sat-bottom-left" data-idx="5">
+                  <div class="sface sf-front"></div>
+                  <div class="sface sf-back"></div>
+                  <div class="sface sf-right"></div>
+                  <div class="sface sf-left"></div>
+                  <div class="sface sf-top"></div>
+                  <div class="sface sf-bottom"></div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Neon Green Circular Checkmark (Appears on Verified) -->
+            <div class="success-ring" id="successRing">
+              <svg class="check-svg" viewBox="0 0 52 52">
+                <circle class="check-circle" cx="26" cy="26" r="23" fill="none" />
+                <path class="check-mark" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+              </svg>
+              <div class="ring-glow"></div>
+            </div>
+          </div>
+
+          <!-- 6 OTP Input Boxes -->
+          <div class="row" id="otpRow">
+            <div class="box-wrap">
+              <input type="text" inputmode="numeric" maxlength="1" class="otp-box active-box" data-idx="0" autocomplete="off">
+              <span class="active-dot-indicator"></span>
+            </div>
+            <div class="box-wrap">
+              <input type="text" inputmode="numeric" maxlength="1" class="otp-box" data-idx="1" autocomplete="off">
+              <span class="active-dot-indicator"></span>
+            </div>
+            <div class="box-wrap">
+              <input type="text" inputmode="numeric" maxlength="1" class="otp-box" data-idx="2" autocomplete="off">
+              <span class="active-dot-indicator"></span>
+            </div>
+            <div class="box-wrap">
+              <input type="text" inputmode="numeric" maxlength="1" class="otp-box" data-idx="3" autocomplete="off">
+              <span class="active-dot-indicator"></span>
+            </div>
+            <div class="box-wrap">
+              <input type="text" inputmode="numeric" maxlength="1" class="otp-box" data-idx="4" autocomplete="off">
+              <span class="active-dot-indicator"></span>
+            </div>
+            <div class="box-wrap">
+              <input type="text" inputmode="numeric" maxlength="1" class="otp-box" data-idx="5" autocomplete="off">
+              <span class="active-dot-indicator"></span>
+            </div>
+          </div>
+
+          <!-- Status & Countdown Row -->
+          <div class="status-zone">
+            <div class="verifying-txt" id="verifyingTxt">Verifying...</div>
+            <div class="error-txt" id="errorTxt">That code isn't right. Please try again.</div>
+            <div class="resend-row" id="resendRow">
+              Didn't receive the code? <button type="button" class="resend-link" id="btnResend">Resend in <span id="resendSec">28s</span></button>
+            </div>
+            <div class="sms-verified" id="smsVerified">
+              Verified. You're all set.
+              <span class="sms-dot"></span>
+            </div>
+          </div>
+
+        </main>
+
+        <!-- Replay Button (Shows upon verified) -->
+        <button type="button" class="btn-replay" id="btnReplay">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <polyline points="1 4 1 10 7 10"></polyline>
+            <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"></path>
+          </svg>
+          <span>Replay</span>
+        </button>
+
+        <!-- Interactive Scenario Pills (Exact from Screenshot) -->
+        <div class="pill-bar" id="pillBar">
+          <button type="button" class="action-pill pill-wrong" id="pillWrong">
+            <span class="dot-indicator"></span>
+            <span>Wrong code · shake & red</span>
+          </button>
+          <button type="button" class="action-pill pill-autofill" id="pillAutofill">
+            <span class="dot-indicator"></span>
+            <span>Autofill from SMS</span>
+          </button>
+          <button type="button" class="action-pill pill-correct" id="pillCorrect">
+            <span class="dot-indicator"></span>
+            <span>Correct code · Verified</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Sign In Credentials Modal (When clicking you@example.com) -->
+  <div class="login-modal-overlay" id="loginModal">
+    <div class="login-modal-card">
+      <div class="modal-header">
+        <h3>User Credentials</h3>
+        <button type="button" class="btn-close-modal" id="btnCloseModal">✕</button>
+      </div>
+      <form id="modalLoginForm" class="modal-form">
+        <div class="modal-field">
+          <label for="modalUserId">User ID / Email</label>
+          <input type="text" id="modalUserId" value="you@example.com" placeholder="user@example.com">
+        </div>
+        <div class="modal-field">
+          <label for="modalPassword">Password</label>
+          <input type="password" id="modalPassword" value="Password#123" placeholder="••••••••••••">
+        </div>
+        <button type="submit" class="btn-save-credentials">Save & Update Code</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
